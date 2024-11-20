@@ -57,7 +57,7 @@ bool B(vector<vector<int>> T, int X[], int n, int c, int a, int b) {
         for (int j = 0; j < n; j++) {
             for (int k = 0; k < n; k++) {
                 if (T[j][k] == c)
-                    return B(T, X, n, j, a, i) && B(T, X, n, k, i+1, b);
+                    return B(T, X, n, j+1, a, i) && B(T, X, n, k+1, i+1, b);
             }
         }
     }
