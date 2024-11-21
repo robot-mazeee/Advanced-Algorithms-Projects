@@ -45,28 +45,29 @@ using namespace std;
  * @param a posição inicial da sequencia
  * @param b posição final da sequencia
  */
-bool B(vector<vector<int>> T, int X[], int n, int c, int a, int b) {
+string B(vector<vector<int>> T, int X[], int n, int c, int a, int b) {
     if (a == b) {
-        cout << "first case:"<<a  << (X[a-1] == c) << "\n";
-        return X[a-1] == c;
+        if (X[a-1] == c){
+            return to_string(X[a-1]);}
+        return "";
     } 
     if (a == b-1) {
-        cout << "second case:" << a << b <<X[a-1] << X[b-1]  << (T[X[a-1]-1][X[b-1]-1] == c) << "\n";
-        return T[X[a-1]-1][X[b-1]-1] == c;
+        if (T[X[a-1]-1][X[b-1]-1] == c)
+            return "(" + to_string(X[a-1]) + " "+ to_string(X[b-1]) + ")";
+        return "";
     }
     
-    for (int i = b-1; i > a; i--) {    // 1 a 4
-        for (int j = 0; j < n; j++) {                 //
-            for (int k = 0; k < n; k++) {             //
+    for (int i = b-1; i > a; i--) {
+        for (int j = 0; j < n; j++) {
+            for (int k = 0; k < n; k++) {
                 if (T[j][k] == c){
-                    cout <<"res: "<< c << "-" << j << k ;
-                    if (B(T, X, n, j+1, a, i) && B(T, X, n, k+1, i+1, b))
-                    return true;
+                    if (B(T, X, n, j+1, a, i) != "" && B(T, X, n, k+1, i+1, b) !="")
+                    return "(" + B(T, X, n, j+1, a, i) + " "+ B(T, X, n, k+1, i+1, b) + ")";
                 }
             }
         }
     }
-    return false;
+    return "";
 }
 
 int main() {
@@ -92,9 +93,12 @@ int main() {
     int result;
     cin >> result;
 
-    bool ANSWER = B(T, X, n, result, 1, m);
-    cout << "ANSWER";
-    cout << ANSWER;
+    string ANSWER = B(T, X, n, result, 1, m);
+    //cout << "ANSWER2\n";
+    if (ANSWER=="")
+        cout << 0;
+    else
+        cout << "1\n" << ANSWER;
 
     return 0;
 }
