@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 
 // int fib(int n) {
@@ -45,7 +46,7 @@ using namespace std;
  * @param a posição inicial da sequencia
  * @param b posição final da sequencia
  */
-string B(vector<vector<int>> T, int X[], int n, int c, int a, int b) {
+string B(vector<vector<int>> T, vector<int> X, int n, int c, int a, int b) {
     if (a == b) {
         if (X[a-1] == c){
             return to_string(X[a-1]);}
@@ -62,7 +63,7 @@ string B(vector<vector<int>> T, int X[], int n, int c, int a, int b) {
             for (int k = 0; k < n; k++) {
                 if (T[j][k] == c){
                     if (B(T, X, n, j+1, a, i) != "" && B(T, X, n, k+1, i+1, b) !="")
-                    return "(" + B(T, X, n, j+1, a, i) + " "+ B(T, X, n, k+1, i+1, b) + ")";
+                        return "(" + B(T, X, n, j+1, a, i) + " "+ B(T, X, n, k+1, i+1, b) + ")";
                 }
             }
         }
@@ -72,7 +73,7 @@ string B(vector<vector<int>> T, int X[], int n, int c, int a, int b) {
 
 int main() {
     int n, m;
-    cin >> n >> m;
+    scanf("%d%d", &n, &m);
 
     vector<vector<int>> T;
     for (int i = 0; i < n; i++) {
@@ -80,25 +81,26 @@ int main() {
         T.push_back(v);
         for (int j = 0; j < n; j++) {
             int a;
-            cin >> a;
+            scanf("%d", &a);
             T[i].push_back(a);
         }
     }
 
-    int X[m];
+    vector<int> X;
     for (int i = 0; i < m; i++) {
-        cin >> X[i];
+        int a;
+        scanf("%d", &a);
+        X.push_back(a);
     }
 
     int result;
-    cin >> result;
+    scanf("%d", &result);
 
     string ANSWER = B(T, X, n, result, 1, m);
-    //cout << "ANSWER2\n";
     if (ANSWER=="")
-        cout << 0;
+        printf("0\n");
     else
-        cout << "1\n" << ANSWER;
+        printf("1\n%s\n", ANSWER.c_str());
 
     return 0;
 }
