@@ -93,18 +93,33 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
         for (int j = 0; j < m-i; j++) {
             int row = j, col = j+i;
             vector<int> result;
+            int count = 0;
             for (int k = col; k > row; k--) {
                 vector<int> first = table[row][k-1], second = table[k][col];
                 for (int x1 : first) {
                     for (int x2 : second) {
-                        result.push_back(T[x1-1][x2-1]);
+                        int value = T[x1-1][x2-1];
+                        bool to_add = true;
+                        for (int u = 0; u < count; u++) {
+                            if (result[u] == value) {
+                                to_add = false;
+                                break;
+                            }
+                        }
+                        if (to_add) {
+                            result.push_back(value);
+                            count++;
+                        }
+                        if (count == n) break;
                     }
+                    if (count == n) break;
                 }
+                if (count == n) break;
             }
             table[row][col] = result;
         }
     }
-    return table[m-1][m-1];
+    return table[0][m-1];
 }
 
 int main() {
