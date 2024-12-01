@@ -82,6 +82,8 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
         vector<int> v;
         v.push_back(X[i]);
         table[i][i] = v;
+        open[i][i].push_back({});
+        close[i][i].push_back({});
 
         // caso base 2
         if (i < m-1) {
@@ -89,9 +91,11 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
             w.push_back(T[X[i]-1][X[i+1]-1]);
             table[i][i+1] = w;
             open[i][i+1].push_back({i});
-            close[i][i+1].push_back({i});
+            close[i][i+1].push_back({i+1});
+
         }
     }
+    //cout << "Start1\n";
 
     for (int i = 2; i < m; i++) {
         for (int j = 0; j < m-i; j++) {
@@ -108,19 +112,29 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
                     for (int i2 = 0; i2 < second.size(); i2++) {
                         int value = T[first[i1]-1][second[i2]-1];
 
+                        //cout << "Start2\n";
+
                         vector<int> value_open;
-                        for (int v1 : first_open[i1]) 
-                            value_open.push_back(v1);
-                        for (int v1 : second_open[i1]) 
-                            value_open.push_back(v1);
+                        for (int v1 : first_open[i1]){
+                            cout << v1;
+                            value_open.push_back(v1);}
+                        //cout << "\n  Start2.5\n"; 
+                        for (int v1 : second_open[i2]){
+                            cout << v1; 
+                            value_open.push_back(v1);}
                         value_open.push_back(row);
 
                         vector<int> value_close;
-                        for (int v2 : first_close[i2]) 
-                            value_close.push_back(v2);
-                        for (int v2 : second_close[i2]) 
-                            value_close.push_back(v2);
+                        for (int v2 : first_close[i1]){
+                            cout << v2;
+                            value_close.push_back(v2);}
+                        //cout << "\n  Start3.5\n";
+                        for (int v2 : second_close[i2]){
+                            cout << v2;
+                            value_close.push_back(v2);}
                         value_close.push_back(col);
+
+                        //cout << "Start3\n";
 
                         bool to_add = true;
                         for (int u = 0; u < count; u++) {
@@ -135,6 +149,7 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
                             result_close.push_back(value_close);
                             count++;
                         }
+
                         if (count == n) break;
                     }
                     if (count == n) break;
@@ -149,10 +164,26 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
     vector<vector<int>> result = open[0][m-1];
     for (int i = 0; i < result.size(); i++) {
         for (int j = 0; j < result[i].size(); j++) {
-            cout << result[i][j];
+           cout << result[i][j];
+           cout << " \n\n  ";
         }
     }
-    return table[0][m-1];
+    cout << " \n\n  ";cout << " \n\n  ";
+    for (int a: table[0][m-1])cout << a;
+    /*cout << "Start\n";
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < m-i; j++) {
+            int row1 = j, col1 = j+i;
+            cout << "Base:"<< row1 << "  " << col1 << "\n";
+            for (vector<int> a: open[row1][col1]){
+                cout << "Item:";
+                for (int b: a){cout << b;}
+                cout << "  |  ";
+                
+            }
+             cout << "  ";
+        }
+    }*/
 }
 
 int main() {
