@@ -74,6 +74,8 @@ string B(vector<vector<int>> T, vector<int> X, int n, int c, int a, int b) {
 vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
     // tabela de programação dinâmica
     vector<int> table[m][m] = {{}};
+    vector<vector<int>> open[m][m] = {{}};
+    vector<vector<int>> close[m][m] = {{}};
     
     for (int i = 0; i < m; i++) {
         // caso base 1
@@ -83,9 +85,11 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
 
         // caso base 2
         if (i < m-1) {
-            vector<int> w;
+            vector<int> w, p;
             w.push_back(T[X[i]-1][X[i+1]-1]);
             table[i][i+1] = w;
+            open[i][i+1].push_back({i});
+            close[i][i+1].push_back({i+1});
         }
     }
 
@@ -96,9 +100,23 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
             int count = 0;
             for (int k = col; k > row; k--) {
                 vector<int> first = table[row][k-1], second = table[k][col];
-                for (int x1 : first) {
-                    for (int x2 : second) {
-                        int value = T[x1-1][x2-1];
+                // for (int x1 : first) {
+                for (int i1 = 0; i1 < first.size(); i1++) {
+                    // for (int x2 : second) {
+                    for (int i2 = 0; i2 < second.size(); i2++) {
+                        int value = T[first[i1]-1][second[i2]-1];
+
+
+
+
+
+                        vector<vector<int>> vector_open = open[row][k-1], vector_close = close[k][col];
+
+
+
+
+
+
                         bool to_add = true;
                         for (int u = 0; u < count; u++) {
                             if (result[u] == value) {
@@ -107,7 +125,9 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
                             }
                         }
                         if (to_add) {
+                            vector<int> open = {row, k-1}, close = {k, col};
                             result.push_back(value);
+                            // parenthesis[row][col] = {open, close};
                             count++;
                         }
                         if (count == n) break;
