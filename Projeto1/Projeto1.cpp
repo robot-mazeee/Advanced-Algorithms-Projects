@@ -71,6 +71,48 @@ string B(vector<vector<int>> T, vector<int> X, int n, int c, int a, int b) {
     return "";
 }
 
+void print_table(vector<int> table[6][6]) {}
+
+vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
+    // tabela de programação dinâmica
+    vector<int> table[m][m];
+    
+    for (int i = 0; i < m; i++) {
+        // caso base 1
+        vector<int> v;
+        v.push_back(X[i]);
+        table[i][i] = v;
+
+        // caso base 2
+        if (i < m-1) {
+            vector<int> w;
+            w.push_back(T[X[i]][X[i+1]]);
+            table[i][i+1] = w;
+        }
+    }
+    
+    for (int i = 2; i < m; i++) {
+        int count = 0; 
+        for (int j = 0; j < m-i; j++) {
+            int row = j, col = j+i;
+            vector<int> result;
+            for (int k = col; k > row; k--) {
+                vector<int> first = table[row][k-1], second = table[k][col];
+                for (int x1 : first) {
+                    for (int x2 : second) {
+                        result.push_back(T[x1-1][x2-1]);
+                    }
+                }
+            }
+            table[row][col] = result;
+        }
+        count++;
+        cout << count << '\n';
+    }
+    cout << "ola";
+    return table[m-1][m-1];
+}
+
 int main() {
     int n, m;
     scanf("%d%d", &n, &m);
@@ -96,11 +138,12 @@ int main() {
     int result;
     scanf("%d", &result);
 
-    string ANSWER = B(T, X, n, result, 1, m);
-    if (ANSWER=="")
-        printf("0\n");
-    else
-        printf("1\n%s\n", ANSWER.c_str());
+    vector<int> ANSWER = BDyn(T, X, n, m, result);
+    // if (ANSWER=="")
+    //     printf("0\n");
+    // else
+    //     printf("1\n%s\n", ANSWER.c_str());
+    for (int i : ANSWER) cout << i << '\n';
 
     return 0;
 }
