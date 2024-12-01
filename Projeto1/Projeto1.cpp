@@ -99,7 +99,11 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
             vector<int> result;
             int count = 0;
             for (int k = col; k > row; k--) {
+
+
                 vector<int> first = table[row][k-1], second = table[k][col];
+
+
                 // for (int x1 : first) {
                 for (int i1 = 0; i1 < first.size(); i1++) {
                     // for (int x2 : second) {
@@ -110,7 +114,14 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
 
 
 
-                        vector<vector<int>> vector_open = open[row][k-1], vector_close = close[k][col];
+                        vector<vector<int>> first_open = open[row][k-1], second_open = close[k][col];
+                        vector<vector<int>> first_close = close[row][k-1], second_close = close[k][col];
+
+                        int value_open = first_open[i1] + second_open[i2] + row;
+                        int value_close = first_close[i1] + second_close[i2] + [col];
+
+                        // [] + [] + []
+
 
 
 
