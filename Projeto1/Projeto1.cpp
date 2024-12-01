@@ -71,11 +71,9 @@ string B(vector<vector<int>> T, vector<int> X, int n, int c, int a, int b) {
     return "";
 }
 
-void print_table(vector<int> table[6][6]) {}
-
 vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
     // tabela de programação dinâmica
-    vector<int> table[m][m];
+    vector<int> table[m][m] = {{}};
     
     for (int i = 0; i < m; i++) {
         // caso base 1
@@ -86,13 +84,12 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
         // caso base 2
         if (i < m-1) {
             vector<int> w;
-            w.push_back(T[X[i]][X[i+1]]);
+            w.push_back(T[X[i]-1][X[i+1]-1]);
             table[i][i+1] = w;
         }
     }
-    
+
     for (int i = 2; i < m; i++) {
-        int count = 0; 
         for (int j = 0; j < m-i; j++) {
             int row = j, col = j+i;
             vector<int> result;
@@ -106,10 +103,7 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
             }
             table[row][col] = result;
         }
-        count++;
-        cout << count << '\n';
     }
-    cout << "ola";
     return table[m-1][m-1];
 }
 
