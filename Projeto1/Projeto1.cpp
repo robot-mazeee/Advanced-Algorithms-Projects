@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 // int fib(int n) {
@@ -71,23 +72,26 @@ string B(vector<vector<int>> T, vector<int> X, int n, int c, int a, int b) {
     return "";
 }
 
-vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
+void BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
     // tabela de programação dinâmica
     vector<int> table[m][m] = {{}};
     vector<vector<int>> open[m][m] = {{}};
     vector<vector<int>> close[m][m] = {{}};
+    vector<int> value_open = {};
+    vector<int> value_close = {};
+    bool finish = false;
     
     for (int i = 0; i < m; i++) {
         // caso base 1
         vector<int> v;
         v.push_back(X[i]);
         table[i][i] = v;
-        open[i][i].push_back({});
+        open[i][i].push_back({}); 
         close[i][i].push_back({});
 
         // caso base 2
         if (i < m-1) {
-            vector<int> w, p;
+            vector<int> w;
             w.push_back(T[X[i]-1][X[i+1]-1]);
             table[i][i+1] = w;
             open[i][i+1].push_back({i});
@@ -101,7 +105,7 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
         for (int j = 0; j < m-i; j++) {
             int row = j, col = j+i;
             vector<int> result = {};
-            vector<vector<int>> result_open = {{}}, result_close = {{}};
+            vector<vector<int>> result_open = {}, result_close = {};
             int count = 0;
             for (int k = col; k > row; k--) {
                 vector<int> first = table[row][k-1], second = table[k][col];
@@ -112,18 +116,19 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
                     for (int i2 = 0; i2 < second.size(); i2++) {
                         int value = T[first[i1]-1][second[i2]-1];
 
-                        vector<int> value_open;
-                        for (int v1 : first_open[i1])
-                            value_open.push_back(v1);
-                        for (int v2 : second_open[i2])
-                            value_open.push_back(v2);
+                        value_open = {};
+
+                        for (int v1 = 0; v1 < first_open[i1].size(); v1++)
+                            value_open.push_back(first_open[i1][v1]);
+                        for (int v2 = 0; v2 < second_open[i2].size(); v2++)
+                            value_open.push_back(second_open[i2][v2]);
                         value_open.push_back(row);
 
-                        vector<int> value_close;
-                        for (int v1 : first_close[i1])
-                            value_close.push_back(v1);
-                        for (int v2 : second_close[i2])
-                            value_close.push_back(v2);
+                        value_close = {};
+                        for (int v3= 0; v3 < first_close[i1].size(); v3++)
+                            value_close.push_back(first_close[i1][v3]);
+                        for (int v4 = 0; v4 < second_close[i2].size(); v4++)
+                            value_close.push_back(second_close[i2][v4]);
                         value_close.push_back(col);
 
                         bool to_add = true;
@@ -134,32 +139,48 @@ vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
                             }
                         }
                         if (to_add) {
+                            if (row == 0 && col == m-1 && value == c)
+                            finish = true;
                             result.push_back(value);
                             result_open.push_back(value_open);
                             result_close.push_back(value_close);
                             count++;
                         }
 
-                        if (count == n) break;
+                        if (count == n || finish) break;
                     }
-                    if (count == n) break;
+                    if (count == n || finish) break;
                 }
-                if (count == n) break;
+                if (count == n || finish) break;
             }
+            
+            if (finish) break;
+
             table[row][col] = result;
+
             open[row][col] = result_open;
             close[row][col] = result_close;
+
+            //if (finish) break;
         }
+        if (finish) break;
     }
 
-    vector<vector<int>> result = close[0][m-1];
-    for (int i = 0; i < result.size(); i++) {
-        for (int j = 0; j < result[i].size(); j++) {
-           cout << result[i][j] << '\n';
-        }
-    }
+    for (int i=0; i < m ; i++){
 
-    return table[0][m-1];
+        for (int i1=0; i1 < count(value_open.begin(), value_open.end(), i); i1++)
+        cout << "(";
+
+        cout << X[i];
+
+        for (int i1=0; i1 < count(value_close.begin(), value_close.end(), i); i1++)
+        cout << ")";
+
+        if (i != m-1)
+        cout << " ";
+
+    }
+    cout << "\n";
 }
 
 int main() {
@@ -187,7 +208,7 @@ int main() {
     int result;
     scanf("%d", &result);
 
-    vector<int> ANSWER = BDyn(T, X, n, m, result);
+    BDyn(T, X, n, m, result);
     // if (ANSWER=="")
     //     printf("0\n");
     // else
