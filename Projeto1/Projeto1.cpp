@@ -112,22 +112,22 @@ void BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
                 vector<vector<int>> first_open = open[row][k-1], second_open = open[k][col];
                 vector<vector<int>> first_close = close[row][k-1], second_close = close[k][col];
 
-                for (int i1 = 0; i1 < first.size(); i1++) {
-                    for (int i2 = 0; i2 < second.size(); i2++) {
+                for (int i1 = 0; i1 < (int) first.size(); i1++) {
+                    for (int i2 = 0; i2 < (int) second.size(); i2++) {
                         int value = T[first[i1]-1][second[i2]-1];
 
                         value_open = {};
 
-                        for (int v1 = 0; v1 < first_open[i1].size(); v1++)
+                        for (int v1 = 0; v1 < (int) first_open[i1].size(); v1++)
                             value_open.push_back(first_open[i1][v1]);
-                        for (int v2 = 0; v2 < second_open[i2].size(); v2++)
+                        for (int v2 = 0; v2 < (int) second_open[i2].size(); v2++)
                             value_open.push_back(second_open[i2][v2]);
                         value_open.push_back(row);
 
                         value_close = {};
-                        for (int v3= 0; v3 < first_close[i1].size(); v3++)
+                        for (int v3= 0; v3 < (int) first_close[i1].size(); v3++)
                             value_close.push_back(first_close[i1][v3]);
-                        for (int v4 = 0; v4 < second_close[i2].size(); v4++)
+                        for (int v4 = 0; v4 < (int) second_close[i2].size(); v4++)
                             value_close.push_back(second_close[i2][v4]);
                         value_close.push_back(col);
 

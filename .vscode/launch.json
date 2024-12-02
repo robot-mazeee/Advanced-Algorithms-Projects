@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/ricar/Documents/Licenciatura/2023-2024/Projeto-ASA/Projeto1",
-      "program": "c:/Users/ricar/Documents/Licenciatura/2023-2024/Projeto-ASA/Projeto1/build/Debug/outDebug",
+      "cwd": "c:/Users/ricar/Downloads",
+      "program": "c:/Users/ricar/Downloads/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
