@@ -150,23 +150,59 @@ string B(vector<vector<int>> T, vector<int> X, int n, int c, int a, int b)
 //     return table[0][m-1];
 // }
 
+string recuperar_parentesis(vector<vector<vector<vector<int>>>> table,int c, int i, int j) {
+    // caso base
+    if (i == j) {
+        if (table[i][i][0][0] == c) {
+            return to_string(table[i][i][0][0]);
+        }
+    }
+    // caso iterativo
+    vector<vector<int>> res = table[i][j];
+    for (vector<int> v : res) {
+        if (v[3] == c) {
+            int left = v[0], k = v[1], right = v[2];
+            vector<vector<int>> res_left = table[i][k-1];
+            vector<vector<int>> res_right = table[k][j];
+
+            for (vector<int> l : res_left) {
+                if (l[3] == left) {
+                    return recuperar_parentesis(table, l[0], i, k-1);
+                }
+            }
+
+            for (vector<int> r : res_right) {
+                if (r[3] == right) {
+                    return recuperar_parentesis(table, r[2], k, j);
+                }
+            }
+        }
+    }
+    return "";
+} 
+
 vector<vector<int>> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
     // PREENCHER A TABELA
 
     // tabela de programação dinâmica
-    vector<vector<int>> table[m][m];
-    // caso base 
+    // vector<vector<int>> table[m][m];
+
+    vector<vector<vector<vector<int>>>> table;
+    table.resize(m);
+    for (int i = 0; i < m; i++) table[i].resize(m);
+
+    // caso base {a}
     for (int i = 0; i < m; i++) {
         vector<int> v;
         v.push_back(X[i]);
         table[i][i].push_back(v);
     }
-    // caso iterativo
+    // caso iterativo {left, k, right, res}
     for (int i = 1; i < m; i++) {
         for (int j = 0; j < m-i; j++) {
             int row = j, col = j+i;
             for (int k = col; k > row; k--) {
-                cout << k << '\n';
+                // cout << k << '\n';
                 vector<vector<int>> left = table[row][k-1], 
                 right = table[k][col];
 
@@ -203,27 +239,42 @@ vector<vector<int>> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int
      */
 
     // RECUPERAR OS PARENTESIS
-    // vector<int> table[0][m-1];
-
-    
-
-    // for (int i = 0; i < m; i++) {
-    //     for (int j =0; j < m-i; j++) {
-    //         for (vector<int> v : table[j][j+i]) {
-    //             cout << "left: " << v[0] << " k: " << v[1] << " right: " << v[2] << " res: "<< v[3] << '\n';
-    //         }
-    //     }
-    // }
-
-    for (vector<int> v : table[0][m-1]) {
-        cout << "left: " << v[0] << " k: " << v[1] << " right: " << v[2] << " res: "<< v[3] << '\n';
+    vector<vector<int>> res = table[0][m-1]; // resposta esta neste indice
+    bool found = false;
+    string ANSWER;
+    for (vector<int> v : res) {
+        if (v[3] == c) {
+            found = true;
+            ANSWER = recuperar_parentesis(table, c, 0, m-1);
+        }
     }
+
+    if (found) {
+        cout << "1\n" << ANSWER << '\n';
+    } else cout << "0\n";
+
+    // for (vector<int> v : table[0][m-1]) {
+    //     cout << "left: " << v[0] << " k: " << v[1] << " right: " << v[2] << " res: "<< v[3] << '\n';
+    // }
 
     return table[0][m-1];
 }
 
-int main()
-{
+
+// void recuperar_parentesis(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
+//     vector<vector<int>> res = BDyn(T, X, n, m, c);
+
+//     // {left, k, right, res = left x right}
+
+//     for (vector<int> v : res) {
+//         if (v[3] == c) {
+//             int k = v[1];
+
+//         }
+//     }
+// }
+
+int main() {
     int n, m;
     scanf("%d%d", &n, &m);
 
