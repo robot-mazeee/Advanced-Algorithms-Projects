@@ -150,38 +150,63 @@ string B(vector<vector<int>> T, vector<int> X, int n, int c, int a, int b)
 //     return table[0][m-1];
 // }
 
+
+
+
+
+
+
+
 string recuperar_parentesis(vector<vector<vector<vector<int>>>> table,int c, int i, int j) {
+
+    //cout << "Loop start:"<< c << "  "<< i << "  "<< j << "\n";
     // caso base
     if (i == j) {
         if (table[i][i][0][0] == c) {
-            return to_string(table[i][i][0][0]);
+            //cout << c << "found base!\n";
+            return to_string(c);
         }
+        return "";
     }
     // caso iterativo
     vector<vector<int>> res = table[i][j];
     for (vector<int> v : res) {
+        //cout << "It: "<< v[3] << " - "<< c << "\n";
         if (v[3] == c) {
             int left = v[0], k = v[1], right = v[2];
+            //cout << "Iteration: "<< left << "  "<< k << "  "<< right << "\n";
+
             vector<vector<int>> res_left = table[i][k-1];
             vector<vector<int>> res_right = table[k][j];
 
-            for (vector<int> l : res_left) {
-                if (l[3] == left) {
-                    return recuperar_parentesis(table, l[0], i, k-1);
-                }
-            }
+            if (recuperar_parentesis(table, left, i, k-1) != "" && recuperar_parentesis(table, right, k, j) != "")
+                return "(" + recuperar_parentesis(table, left, i, k-1) + " " + recuperar_parentesis(table, right, k, j) + ")";
 
-            for (vector<int> r : res_right) {
-                if (r[3] == right) {
-                    return recuperar_parentesis(table, r[2], k, j);
-                }
-            }
+                // for (vector<int> l : res_left) {
+                //     cout << "-: " << l[0] << "  "<< l[1] << "  " << l[2] << "  "<< l[3] << "  "<< "\n";
+                //     if (l[3] == left) {
+                //         return recuperar_parentesis(table, left, i, k-1);
+                //     }
+                // }
+
+                // for (vector<int> r : res_right) {
+                //     if (r[3] == right) {
+                //         return recuperar_parentesis(table, right, k, j);
+                //     }
+                // }
+             
         }
     }
     return "";
 } 
 
-vector<vector<int>> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
+
+
+
+
+
+
+void BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
     // PREENCHER A TABELA
 
     // tabela de programação dinâmica
@@ -190,6 +215,7 @@ vector<vector<int>> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int
     vector<vector<vector<vector<int>>>> table;
     table.resize(m);
     for (int i = 0; i < m; i++) table[i].resize(m);
+    bool finish = false;
 
     // caso base {a}
     for (int i = 0; i < m; i++) {
@@ -201,18 +227,21 @@ vector<vector<int>> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int
     for (int i = 1; i < m; i++) {
         for (int j = 0; j < m-i; j++) {
             int row = j, col = j+i;
+            vector<int> registered = {};
+            int count = 0;
+
             for (int k = col; k > row; k--) {
                 // cout << k << '\n';
                 vector<vector<int>> left = table[row][k-1], 
                 right = table[k][col];
 
-                for (int i = 0; i < left.size(); i++) {
+                for (int i = 0; i < (int) left.size(); i++) {
                     vector<int> l = left[i];
                     int res_left;
                     if (l.size() == 1) res_left = l[0];
                     else res_left = T[l[0]-1][l[2]-1];
 
-                    for (int j = 0; j < right.size(); j++) {
+                    for (int j = 0; j < (int) right.size(); j++) {
                         vector<int> r = right[j];
                         int res_right;
                         // se for um caso base
@@ -221,12 +250,30 @@ vector<vector<int>> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int
                         else res_right = T[r[0]-1][r[2]-1];
 
                         int res_value = T[res_left-1][res_right-1];
-                        vector<int> res = {res_left, k, res_right, res_value};
-                        table[row][col].push_back(res);
+
+                        if (find(registered.begin(), registered.end(), res_value) == registered.end()){
+                            registered.push_back(res_value);
+                            vector<int> res = {res_left, k, res_right, res_value};
+                            table[row][col].push_back(res);
+                            if (row == 0 && col == m - 1 && res_value == c)
+                                finish = true;
+                            count++;
+                            
+                        }
+                        if (count == n || finish)
+                            break;
                     }
+                    if (count == n || finish)
+                            break;
                 }
+                if (count == n || finish)
+                            break;
             }
+            if (finish)
+                break;
         }
+        if (finish)
+                break;
     }
 
         /**
@@ -253,11 +300,13 @@ vector<vector<int>> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int
         cout << "1\n" << ANSWER << '\n';
     } else cout << "0\n";
 
-    // for (vector<int> v : table[0][m-1]) {
-    //     cout << "left: " << v[0] << " k: " << v[1] << " right: " << v[2] << " res: "<< v[3] << '\n';
+    // cout << "huh?\n";
+    // for (vector<int> v : table[0][4]) {
+    //     //cout << "left: " << v[0] << " k: " << v[1] << " right: " << v[2] << " res: "<< v[3] << '\n';
     // }
+    // cout << "what\n";
 
-    return table[0][m-1];
+    return;
 }
 
 
@@ -302,7 +351,18 @@ int main() {
     int result;
     scanf("%d", &result);
 
-    vector<vector<int>> ANSWER = BDyn(T, X, n, m, result);
+    if (m == 1){
+        if (X[0] == result) cout << "1\n" << result << "\n";
+        else cout << "0\n";
+        return 0;
+    }
+    if (m == 2){
+        if (T[X[0]-1][X[1]-1] == result) cout << "1\n(" << X[0] << " " << X[1] << ")\n";
+        else cout << "0\n";
+        return 0;
+    }
+
+    BDyn(T, X, n, m, result);
     // if (ANSWER=="")
     //     printf("0\n");
     // else
