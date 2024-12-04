@@ -273,20 +273,6 @@ void BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
     return;
 }
 
-
-// void recuperar_parentesis(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
-//     vector<vector<int>> res = BDyn(T, X, n, m, c);
-
-//     // {left, k, right, res = left x right}
-
-//     for (vector<int> v : res) {
-//         if (v[3] == c) {
-//             int k = v[1];
-
-//         }
-//     }
-// }
-
 int main() {
     int n, m;
     scanf("%d%d", &n, &m);
@@ -315,23 +301,7 @@ int main() {
     int result;
     scanf("%d", &result);
 
-    if (m == 1){
-        if (X[0] == result) cout << "1\n" << result << "\n";
-        else cout << "0\n";
-        return 0;
-    }
-    if (m == 2){
-        if (T[X[0]-1][X[1]-1] == result) cout << "1\n(" << X[0] << " " << X[1] << ")\n";
-        else cout << "0\n";
-        return 0;
-    }
-
     BDyn(T, X, n, m, result);
-    // if (ANSWER=="")
-    //     printf("0\n");
-    // else
-    //     printf("1\n%s\n", ANSWER.c_str());
-    // for (int i : ANSWER) cout << i << '\n';
 
     return 0;
 }
