@@ -22,39 +22,39 @@ using namespace std;
  * @param a posição inicial da sequencia
  * @param b posição final da sequencia
  */
-string B(vector<vector<int>> T, vector<int> X, int n, int c, int a, int b)
-{
-    if (a == b)
-    {
-        if (X[a - 1] == c)
-        {
-            return to_string(X[a - 1]);
-        }
-        return "";
-    }
-    if (a == b - 1)
-    {
-        if (T[X[a - 1] - 1][X[b - 1] - 1] == c)
-            return "(" + to_string(X[a - 1]) + " " + to_string(X[b - 1]) + ")";
-        return "";
-    }
+// string B(vector<vector<int>> T, vector<int> X, int n, int c, int a, int b)
+// {
+//     if (a == b)
+//     {
+//         if (X[a - 1] == c)
+//         {
+//             return to_string(X[a - 1]);
+//         }
+//         return "";
+//     }
+//     if (a == b - 1)
+//     {
+//         if (T[X[a - 1] - 1][X[b - 1] - 1] == c)
+//             return "(" + to_string(X[a - 1]) + " " + to_string(X[b - 1]) + ")";
+//         return "";
+//     }
 
-    for (int i = b - 1; i > a; i--)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            for (int k = 0; k < n; k++)
-            {
-                if (T[j][k] == c)
-                {
-                    if (B(T, X, n, j + 1, a, i) != "" && B(T, X, n, k + 1, i + 1, b) != "")
-                        return "(" + B(T, X, n, j + 1, a, i) + " " + B(T, X, n, k + 1, i + 1, b) + ")";
-                }
-            }
-        }
-    }
-    return "";
-}
+//     for (int i = b - 1; i > a; i--)
+//     {
+//         for (int j = 0; j < n; j++)
+//         {
+//             for (int k = 0; k < n; k++)
+//             {
+//                 if (T[j][k] == c)
+//                 {
+//                     if (B(T, X, n, j + 1, a, i) != "" && B(T, X, n, k + 1, i + 1, b) != "")
+//                         return "(" + B(T, X, n, j + 1, a, i) + " " + B(T, X, n, k + 1, i + 1, b) + ")";
+//                 }
+//             }
+//         }
+//     }
+//     return "";
+// }
 
 // vector<int> BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
 //     // tabela de programação dinâmica
@@ -154,48 +154,41 @@ string B(vector<vector<int>> T, vector<int> X, int n, int c, int a, int b)
 
 
 
+struct node {
+    int l = -1;
+    int r = -1;
+    int k;
+    int res;
+};
 
-
-
-string recuperar_parentesis(vector<vector<vector<vector<int>>>>& table,int c, int i, int j) {
-    //cout << "Loop start:"<< c << "  "<< i << "  "<< j << "\n";
+string recuperar_parentesis(vector<vector<vector<node>>>& table,int c, int i, int j) {
     // caso base
     if (i == j) {
         return to_string(c);
     }
     // caso iterativo
-    vector<vector<int>>& res = table[i][j];
-    for (vector<int>& v : res) {
-        //cout << "It: "<< v[3] << " - "<< c << "\n";
-        if (v[3] == c) {
-            int left = v[0], k = v[1], right = v[2];
+    vector<node>& res = table[i][j];
+    for (node& v : res) {
+        if (v.res == c) {
+            int left = v.l, k = v.k, right = v.r;
             return "(" + recuperar_parentesis(table, left, i, k-1) + " " + recuperar_parentesis(table, right, k, j) + ")";
         }
     }
     return "";
 } 
 
-
-
-
-
-
-
 void BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
     // PREENCHER A TABELA
 
-    // tabela de programação dinâmica
-    // vector<vector<int>> table[m][m];
-
-    vector<vector<vector<vector<int>>>> table;
+    vector<vector<vector<node>>> table;
     table.resize(m);
     for (int i = 0; i < m; i++) table[i].resize(m);
     bool finish = false;
 
     // caso base {a}
     for (int i = 0; i < m; i++) {
-        vector<int> v;
-        v.push_back(X[i]);
+        node v;
+        v.res = X[i];
         table[i][i].push_back(v);
     }
     // caso iterativo {left, k, right, res}
@@ -206,22 +199,21 @@ void BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
             int count = 0;
 
             for (int k = col; k > row; k--) {
-                // cout << k << '\n';
-                vector<vector<int>>& left = table[row][k-1], right = table[k][col];
+                vector<node>& left = table[row][k-1], right = table[k][col];
 
                 for (int i = 0; i < (int) left.size(); i++) {
-                    vector<int>& l = left[i];
+                    node& l = left[i];
                     int res_left;
-                    if (l.size() == 1) res_left = l[0];
-                    else res_left = T[l[0]-1][l[2]-1];
+                    if (l.l == -1) res_left = l.res;
+                    else res_left = T[l.l-1][l.r-1];
 
                     for (int j = 0; j < (int) right.size(); j++) {
-                        vector<int>& r = right[j];
+                        node& r = right[j];
                         int res_right;
                         // se for um caso base
-                        if (r.size() == 1) res_right = r[0];
+                        if (r.l == -1) res_right = r.res;
                         // se nao 
-                        else res_right = T[r[0]-1][r[2]-1];
+                        else res_right = T[r.l-1][r.r-1];
 
                         int res_value = T[res_left-1][res_right-1];
 
@@ -230,50 +222,44 @@ void BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
                             if (row == 0 && col == m - 1){
                                 if (res_value == c){
                                     finish = true;
-                                    vector<int> res = {res_left, k, res_right, res_value};
+                                    node res;
+                                    res.l = res_left;
+                                    res.k = k;
+                                    res.r = res_right;
+                                    res.res = res_value;
                                     table[row][col].push_back(res);
                                 }
                             }
                             else{
                                 count++;
-                                vector<int> res = {res_left, k, res_right, res_value};
+                                node res;
+                                res.l = res_left;
+                                res.k = k;
+                                res.r = res_right;
+                                res.res = res_value;
                                 table[row][col].push_back(res);
                             }
                             // resgistar no vetor
                             registered[res_value-1]++;
                         }
                             
-                        if (count == n || finish)
-                            break;
+                        if (count == n || finish) break;
                     }
-                    if (count == n || finish)
-                            break;
+                    if (count == n || finish) break;
                 }
-                if (count == n || finish)
-                            break;
+                if (count == n || finish) break;
             }
-            if (finish)
-                break;
+            if (finish) break;
         }
-        if (finish)
-                break;
+        if (finish) break;
     }
 
-        /**
-3 4
-2 2 2
-2 1 2
-1 3 3
-2 2 3 3
-2
-     */
-
     // RECUPERAR OS PARENTESIS
-    vector<vector<int>>& res = table[0][m-1]; // resposta esta neste indice
+    vector<node>& res = table[0][m-1]; // resposta esta neste indice
     bool found = false;
     string ANSWER;
-    for (vector<int> v : res) {
-        if (v[3] == c) {
+    for (node v : res) {
+        if (v.res == c) {
             found = true;
             ANSWER = recuperar_parentesis(table, c, 0, m-1);
             break;
@@ -283,12 +269,6 @@ void BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
     if (found) {
         cout << "1\n" << ANSWER << '\n';
     } else cout << "0\n";
-
-    // cout << "huh?\n";
-    // for (vector<int> v : table[0][4]) {
-    //     //cout << "left: " << v[0] << " k: " << v[1] << " right: " << v[2] << " res: "<< v[3] << '\n';
-    // }
-    // cout << "what\n";
 
     return;
 }
