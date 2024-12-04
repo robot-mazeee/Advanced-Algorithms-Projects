@@ -161,7 +161,7 @@ struct node {
     int res;
 };
 
-string recuperar_parentesis(vector<vector<vector<node>>>& table,int c, int i, int j) {
+string recuperar_parentesis(vector<vector<vector<node>>>& table, int c, int i, int j) {
     // caso base
     if (i == j) {
         return to_string(c);
@@ -177,7 +177,7 @@ string recuperar_parentesis(vector<vector<vector<node>>>& table,int c, int i, in
     return "";
 } 
 
-void BDyn(vector<vector<int>> T, vector<int> X, int n, int m, int c) {
+void BDyn(vector<vector<int>>& T, vector<int>& X, int n, int m, int c) {
     // PREENCHER A TABELA
 
     vector<vector<vector<node>>> table;
