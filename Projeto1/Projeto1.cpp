@@ -277,25 +277,21 @@ int main() {
     int n, m;
     scanf("%d%d", &n, &m);
 
-    vector<vector<int>> T;
+    vector<vector<int>> T(n, vector<int> (n));
     for (int i = 0; i < n; i++)
     {
         vector<int> v;
         T.push_back(v);
         for (int j = 0; j < n; j++)
         {
-            int a;
-            scanf("%d", &a);
-            T[i].push_back(a);
+            scanf("%d", &T[i][j]);
         }
     }
 
-    vector<int> X;
+    vector<int> X(m);
     for (int i = 0; i < m; i++)
     {
-        int a;
-        scanf("%d", &a);
-        X.push_back(a);
+        scanf("%d", &X[i]);
     }
 
     int result;
