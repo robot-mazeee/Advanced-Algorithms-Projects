@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <algorithm>
+#include <chrono>
 using namespace std;
 
 /**
@@ -274,9 +274,11 @@ void BDyn(vector<vector<int>>& T, vector<int>& X, int n, int m, int c) {
 }
 
 int main() {
+    auto start = chrono::high_resolution_clock::now();
+
     int n, m;
     scanf("%d%d", &n, &m);
-
+    
     vector<vector<int>> T;
     for (int i = 0; i < n; i++)
     {
@@ -302,6 +304,10 @@ int main() {
     scanf("%d", &result);
 
     BDyn(T, X, n, m, result);
+
+    // auto stop = chrono::high_resolution_clock::now();                                                    
+    // auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+    // printf("%d", duration.count());
 
     return 0;
 }
