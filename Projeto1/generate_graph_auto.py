@@ -4,7 +4,7 @@ import subprocess, random, time
 
 # fazer pip install matplotlib no termianal/shell/CommandPrompt
 
-# MUDAR O NOME DO VOSSO PROJETO NA LINHA 15 de resto ta tudo 
+# MUDAR O NOME DO VOSSO PROJETO NA LINHA 16 de resto ta tudo 
 # feito por vcs só têm de correr este ficheiro na diretoria
 # onde tem o vosso projeto e gerador
 
@@ -90,17 +90,17 @@ def f(input_size):
 def main():
     # tamanho do input [n, m]
     input_size = generate_input_size()
-    input_size = [[5, 50], [10, 100], [15, 150], [20, 200], [25, 250], [30, 300], [35, 350], [40, 400], [45, 450], [50, 500], [55, 550], [60, 600], [65, 650], [70, 700], [75, 750], [80, 800], [85, 850], [90, 900], [95, 950], [100, 1000]]
+    # input_size = [[5, 50], [10, 100], [15, 150], [20, 200], [25, 250], [30, 300], [35, 350], [40, 400], [45, 450], [50, 500], [55, 550], [60, 600], [65, 650], [70, 700], [75, 750], [80, 800], [85, 850], [90, 900], [95, 950], [100, 1000]]
     # calcular tempo de cada input
     times = run(input_size)
     # calcular f(n, m)
     comp = f(input_size)
 
     # Degree 1 para ser linear
-    coefficients = np.polyfit(np.array(comp), np.array(times), 2)
-    slope, intercept = coefficients
-    # equação da linha
-    y_pred = slope * np.array(comp) + intercept
+    # coefficients = np.polyfit(np.array(comp), np.array(times), 2)
+    # slope, intercept = coefficients
+    # # equação da linha
+    # y_pred = slope * np.array(comp) + intercept
 
     print(comp)
     print(times)
@@ -108,7 +108,7 @@ def main():
     # desenhar os pontos
     plt.scatter(comp, times, color="blue")
     # desenhar a linha
-    plt.plot(comp, y_pred)
+    plt.plot(comp, times)
     plt.xlabel('f(n,m)')
     plt.ylabel('Time (s)')
     plt.title('Análise teórica')

@@ -274,7 +274,7 @@ void BDyn(vector<vector<int>>& T, vector<int>& X, int n, int m, int c) {
 }
 
 int main() {
-    auto start = chrono::high_resolution_clock::now();
+    // auto start = chrono::high_resolution_clock::now();
 
     int n, m;
     scanf("%d%d", &n, &m);
