@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-import subprocess, time
+import subprocess, time, math
 
 # fazer pip install matplotlib no termianal/shell/CommandPrompt
 
@@ -7,9 +7,7 @@ import subprocess, time
 # feito por vcs só têm de correr este ficheiro na diretoria
 # onde tem o vosso projeto e gerador (com nome gera.cpp)
 
-# numero de inputs que querem (ajustável)
-num_inputs = 20
-
+num_inputs = 5
 generator_path = 'gera.cpp'
 generator_exe = 'gerador'
 project_path = 'Projeto2.cpp'
@@ -19,7 +17,7 @@ input_file = 'input.in'
 def calculate_comp(n, m, l):
     # retornar função de complexidade, por exemplo:
     # se temos O(n^4m^2) return n**4 * m**2
-    return l**3
+    return n*l**2*math.log2(l)
 
 def generate_input_size():
     input_size = []
@@ -28,22 +26,22 @@ def generate_input_size():
     l_values = []
 
     n = 5000
-    div = n // num_inputs
+    const = n // num_inputs
     for _ in range(num_inputs):
-        n_values.append(div)
-        div += div
+        n_values.append(n)
+        n -= const
 
     m = 10000
-    div = m // num_inputs
+    const = m // num_inputs
     for _ in range(num_inputs):
-        m_values.append(div)
-        div += div
+        m_values.append(m)
+        m -= const
 
     l = 100
-    div = l // num_inputs
+    const = l // num_inputs
     for _ in range(num_inputs):
-        l_values.append(div)
-        div += div
+        l_values.append(l)
+        l -= const
 
     m_values = sorted(m_values)
     n_values = sorted(n_values)
