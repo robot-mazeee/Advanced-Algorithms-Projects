@@ -58,15 +58,17 @@ int main() {
     vector<set<int>> stations_lines(n+1);
     vector<set<int>> lines(l+1);
 
-    for (int i = 0; i < m; i++) {
+    // O(m(log(n)+log(l))) - para construir o grafo inicial em que cada indice é uma estação e os valores são as linhas que passam por essa estação
+    for (int i = 0; i < m; i++) { // O(m)
         int x, y, line;
         scanf("%d%d%d", &x, &y, &line);
-        stations_lines[x].insert(line);
+        stations_lines[x].insert(line); // O(log(n))
         stations_lines[y].insert(line);
-        lines[line].insert(x);
+        lines[line].insert(x); // O(log(l))
         lines[line].insert(y);
     }
 
+    // O(n) - verificar se ha uma estação que não tem linha (não está conectada)
     for (int i = 1; i < n+1; i++) {
         if (stations_lines[i].size() == 0) {
             cout << -1 << '\n';
@@ -74,6 +76,7 @@ int main() {
         }
     }
     
+    // O(l)
     for (set<int> stations : lines){
       if ((int) stations.size() == n) {
         cout << 0 << '\n';
@@ -85,22 +88,27 @@ int main() {
     //  1       2    3  - indexes (lines)
     vector<set<int>> line_graph;
     line_graph.resize(l+1);
-    for (const set<int>& v : stations_lines) {
+    for (const set<int>& v : stations_lines) { // O(n) 
         auto it = v.begin();
 
-        while (it != v.end()) {
+        while (it != v.end()) { // O(l)
             int first_element = *it;
             auto it_copy = it;
             ++it_copy; // Move the copy iterator to the next element
 
-            while (it_copy != v.end()) {
+            while (it_copy != v.end()) { // O(l)
                 int second_element = *it_copy;
-                line_graph[first_element].insert(second_element);
+                line_graph[first_element].insert(second_element); // O(l)
                 line_graph[second_element].insert(first_element);
                 ++it_copy; // Move the inner iterator forward
             }
             ++it; // Move the outer iterator forward
         }
+    }
+
+    for (set<int> s : line_graph) {
+        for (int i : s) cout << i << ' ';
+        cout << '\n';
     }
 
     int answer = -1;
