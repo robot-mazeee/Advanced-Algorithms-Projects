@@ -8,7 +8,7 @@ import subprocess, time
 # onde tem o vosso projeto e gerador (com nome gera.cpp)
 
 # numero de inputs que querem (ajustável)
-num_inputs = 5
+num_inputs = 20
 
 generator_path = 'gera.cpp'
 generator_exe = 'gerador'
@@ -27,19 +27,19 @@ def generate_input_size():
     m_values = []
     l_values = []
 
-    n = 50
+    n = 5000
     div = n // num_inputs
     for _ in range(num_inputs):
         n_values.append(div)
         div += div
 
-    m = 100
+    m = 10000
     div = m // num_inputs
     for _ in range(num_inputs):
         m_values.append(div)
         div += div
 
-    l = 10
+    l = 100
     div = l // num_inputs
     for _ in range(num_inputs):
         l_values.append(div)
@@ -86,7 +86,8 @@ def calculate_time():
         # tempo de inicio
         start_time = time.perf_counter()
         # correr o projeto
-        subprocess.run(["./" + project_exe], stdin=file, stdout=subprocess.DEVNULL, text=True)
+        result = subprocess.run(["./" + project_exe], stdin=file, stdout=subprocess.DEVNULL, text=True)
+        # if result.stdout == -1:
         # tempo de fim
         end_time = time.perf_counter()
 
@@ -104,7 +105,7 @@ def main():
     # tamanho do input [n, m, l]
     input_size = generate_input_size()
     print(input_size)
-    input_size = [[10, 20, 5]]
+    # input_size = [[10, 20, 5]]
     # calcular tempo de cada input
     times = run(input_size)
     # calcular f(n, m)
