@@ -7,7 +7,7 @@ import subprocess, time, math
 # feito por vcs só têm de correr este ficheiro na diretoria
 # onde tem o vosso projeto e gerador (com nome gera.cpp)
 
-num_inputs = 5
+num_inputs = 20
 generator_path = 'gera.cpp'
 generator_exe = 'gerador'
 project_path = 'Projeto2.cpp'
@@ -79,15 +79,21 @@ def calculate_time():
     # compilar o projeto
     subprocess.run(["g++", project_path, "-o", project_exe])
 
+    output = -1
     # abrir o ficheiro gerado
     with open("input.in", "r") as file:
-        # tempo de inicio
-        start_time = time.perf_counter()
-        # correr o projeto
-        result = subprocess.run(["./" + project_exe], stdin=file, stdout=subprocess.DEVNULL, text=True)
-        # if result.stdout == -1:
-        # tempo de fim
-        end_time = time.perf_counter()
+        while output == -1 or output == 0:
+            # tempo de inicio
+            start_time = time.perf_counter()
+            # correr o projeto
+            result = subprocess.run(["./" + project_exe], stdin=file, capture_output=True, text=True)
+
+            # tempo de fim
+            end_time = time.perf_counter()
+
+            output = result.stdout
+            if output != -1:
+                print(result.stdout)
 
     return end_time - start_time
 
@@ -101,9 +107,9 @@ def f(input_size):
 
 def main():
     # tamanho do input [n, m, l]
-    input_size = generate_input_size()
+    # input_size = generate_input_size()
+    input_size = [[5, 22, 6], [10, 34, 7], [15, 46, 8], [20, 58, 9], [25, 70, 10], [30, 82, 11], [35, 94, 12], [40, 106, 13], [45, 118, 14], [50, 130, 15], [55, 142, 16], [60, 154, 17], [65, 166, 18], [70, 178, 19], [75, 190, 20], [80, 202, 21], [85, 214, 22], [90, 226, 23], [95, 238, 24], [100, 250, 25]]
     print(input_size)
-    # input_size = [[10, 20, 5]]
     # calcular tempo de cada input
     times = run(input_size)
     # calcular f(n, m)
