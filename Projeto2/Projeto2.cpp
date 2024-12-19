@@ -47,7 +47,6 @@ int bfs(vector<set<int>>& line_graph, int size, int s) {
     return max_dist;
 }
 
-
 int main() {
     // n estacoes, m arcos, l linhas
     int n, m, l;
@@ -58,7 +57,7 @@ int main() {
     vector<set<int>> stations_lines(n+1);
     vector<set<int>> lines(l+1);
 
-    // O(m(log(n)+log(l))) - para construir o grafo inicial em que cada indice é uma estação e os valores são as linhas que passam por essa estação
+    // O(m(log(nl))) - para construir o grafo inicial em que cada indice é uma estação e os valores são as linhas que passam por essa estação
     for (int i = 0; i < m; i++) { // O(m)
         int x, y, line;
         scanf("%d%d%d", &x, &y, &line);
@@ -86,6 +85,8 @@ int main() {
 
     // {2, 3}, {1}, {1} - (connections to other lines)
     //  1       2    3  - indexes (lines)
+
+    // O(nl**2log(l))
     vector<set<int>> line_graph;
     line_graph.resize(l+1);
     for (const set<int>& v : stations_lines) { // O(n) 
