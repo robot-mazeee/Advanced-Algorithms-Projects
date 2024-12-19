@@ -98,7 +98,7 @@ int main() {
 
             while (it_copy != v.end()) { // O(l)
                 int second_element = *it_copy;
-                line_graph[first_element].insert(second_element); // O(l)
+                line_graph[first_element].insert(second_element); // O(log(l))
                 line_graph[second_element].insert(first_element);
                 ++it_copy; // Move the inner iterator forward
             }
@@ -106,11 +106,7 @@ int main() {
         }
     }
 
-    for (set<int> s : line_graph) {
-        for (int i : s) cout << i << ' ';
-        cout << '\n';
-    }
-
+    // O(l**3)
     int answer = -1;
     for (int vertex = 1; vertex < l+1; vertex++) {
         int dist = bfs(line_graph, l+1, vertex);
