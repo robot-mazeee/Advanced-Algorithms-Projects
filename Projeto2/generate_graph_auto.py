@@ -12,7 +12,7 @@ import numpy as np
 # onde tem o vosso projeto e gerador (com nome gera.cpp)
 
 # AJUSTAVEL
-num_inputs = 10
+num_inputs = 50
 
 generator_path = 'gera.cpp'
 generator_exe = 'gerador'
@@ -23,9 +23,10 @@ input_file = 'input.in'
 def calculate_comp(n, m, l):
     # retornar função de complexidade, por exemplo:
     # se temos O(n^4m^2) return n**4 * m**2
-    return m * math.log2(l)
-    # return n * l**2 * log2(l)
-    # return m * math.log2(l) + n * l**2 * log2(l)
+    # return m * math.log2(n*l)
+    return m * math.log2(n*l) + n * l**2 * math.log2(l)
+    # return m * math.log2(l)
+    # return n * l**2 * math.log2(l)
 
 def generate_input_size():
     input_size = []
@@ -93,7 +94,7 @@ def main():
     input_size = generate_input_size()
     # calcular tempo de cada input
     times = run(input_size)
-    # calcular f(n, l)
+    # calcular f(n, m, l)
     comp = f(input_size)
 
     # Degree 1 para ser linear
@@ -103,7 +104,7 @@ def main():
     # equação da linha
     line = slope * np.array(comp) + intercept
 
-    print('Complexidade:', comp)
+    print('Inputs:', input_size)
     print('Time:', times)
 
     # desenhar os pontos
@@ -112,7 +113,7 @@ def main():
     plt.plot(comp, line)
     plt.xlabel('f(n,m,l)')
     plt.ylabel('Time (s)')
-    plt.title('Análise teórica')
+    plt.title('Avaliação Experimental dos Resultados')
     plt.show()
 
 main()

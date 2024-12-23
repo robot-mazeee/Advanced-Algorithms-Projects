@@ -57,17 +57,17 @@ int main() {
     vector<set<int>> stations_lines(n+1);
     vector<set<int>> lines(l+1);
 
-    // O(m(log(l))) - para construir o grafo inicial em que cada indice é uma estação e os valores são as linhas que passam por essa estação
+    // O(m(log(ln))) - para construir o grafo inicial em que cada indice é uma estação e os valores são as linhas que passam por essa estação
     for (int i = 0; i < m; i++) { // O(m)
         int x, y, line;
         scanf("%d%d%d", &x, &y, &line);
         stations_lines[x].insert(line); // O(log(l))
         stations_lines[y].insert(line);
-        lines[line].insert(x); // O(log(l))
+        lines[line].insert(x); // O(log(n))
         lines[line].insert(y);
     }
 
-    // O(n) - verificar se ha uma estação que não tem linha (não está conectada)
+    // O(n) - verificar se há uma estação desconectada, ou seja, não tem linhas
     for (int i = 1; i < n+1; i++) {
         if (stations_lines[i].size() == 0) {
             cout << -1 << '\n';
@@ -75,7 +75,7 @@ int main() {
         }
     }
     
-    // O(l)
+    // O(l) - verificar se há uma linha que contém todas as estações
     for (set<int> stations : lines){
       if ((int) stations.size() == n) {
         cout << 0 << '\n';
@@ -86,7 +86,7 @@ int main() {
     // {2, 3}, {1}, {1} - (connections to other lines)
     //  1       2    3  - indexes (lines)
 
-    // O(m(log(l))) > O(nl**2log(l))
+    // O(nl**2log(l))
     vector<set<int>> line_graph;
     line_graph.resize(l+1);
     for (const set<int>& v : stations_lines) { // O(n) 
