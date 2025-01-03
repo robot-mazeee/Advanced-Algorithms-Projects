@@ -78,8 +78,8 @@
 
 import pulp as p
 
-# # Ler os dados de entrada
-n, m, t = map(int, input().split())  # número de fábricas, países e crianças
+# # # Ler os dados de entrada
+# n, m, t = map(int, input().split())  # número de fábricas, países e crianças
 
 # Fábricas
 # fabrica_info = {}
