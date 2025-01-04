@@ -43,32 +43,33 @@ t_vars = p.LpVariable.dicts("criancas", t_names, 0, None, p.LpInteger)
 x = p.LpVariable.dicts('x', (t_names, n_names), 0, 1, p.LpBinary)
 x = {(t, n): x[t][n] for t in t_names for n in n_names}
 
+# loop das fabricas
 for _ in range(n):
     # fabrica, pais, stock
     fabrica, pais, stock = input().split()
     n_vars[fabrica].upBound = int(stock)
     fabrica_to_pais[fabrica] = pais
 
+# loops dos paises
 for _ in range(m):
     pais, pmaxj, pminj = input().split()
     m_vars[pais].lowBound = int(pminj)
     m_vars[pais].upBound = int(pmaxj)
 
+# loop das criancas
 for _ in range(t):
     crianca, pais, *fabricas = input().split()
     fabricas_crianca[crianca] = fabricas
     crianca_to_pais[crianca] = pais
-
-for crianca in t_names:
-    problem += p.lpSum(x[(crianca, fabrica)] for fabrica in fabricas_crianca[crianca]) <= 1
+    problem += p.lpSum(x[(crianca, fabrica)] for fabrica in fabricas) <= 1
 
 for fabrica in n_names:
     problem += p.lpSum(x[(crianca, fabrica)] for crianca in t_names if fabrica in fabricas_crianca[crianca]) <= n_vars[fabrica].upBound
 
 for pais in m_names:    
-    problem += p.lpSum(x[(crianca, fabrica)] for crianca in t_names for fabrica in fabricas_crianca[crianca] if crianca_to_pais[crianca] == pais) >= m_vars[pais].lowBound  # Limite mínimo de distribuição
-        
-    problem += p.lpSum(x[(crianca, fabrica)] for crianca in t_names for fabrica in fabricas_crianca[crianca] if crianca_to_pais[crianca] == pais and fabrica_to_pais[fabrica] != pais) <= m_vars[pais].upBound  # Limite máximo de distribuição
+    problem += p.lpSum(x[(crianca, fabrica)] for crianca in t_names for fabrica in fabricas_crianca[crianca] if crianca_to_pais[crianca] == pais) >= m_vars[pais].lowBound 
+
+    problem += p.lpSum(x[(crianca, fabrica)] for crianca in t_names for fabrica in fabricas_crianca[crianca] if crianca_to_pais[crianca] != pais and fabrica_to_pais[fabrica] == pais) <= m_vars[pais].upBound
 
 # Função objetivo
 problem += p.lpSum(x[(crianca, fabrica)] for crianca in t_names for fabrica in fabricas_crianca[crianca])
@@ -79,4 +80,3 @@ if p.LpStatus[problem.status] == 'Optimal':
     print(int(p.value(problem.objective)))
 else:
     print(-1)
-    
