@@ -96,12 +96,6 @@ def main():
     # calcular f(n, m)
     comp = f(input_size)
 
-    # Degree 1 para ser linear
-    # coefficients = np.polyfit(np.array(comp), np.array(times), 2)
-    # slope, intercept = coefficients
-    # # equação da linha
-    # y_pred = slope * np.array(comp) + intercept
-
     print(comp)
     print(times)
 
