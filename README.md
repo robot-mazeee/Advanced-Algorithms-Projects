@@ -1,0 +1,1 @@
+This repository contains the solutions to three projects I developed as part of my Algorithms course. Additionally, for each project, I implemented: 1) a Python script named ```generate_graph_auto``` to generate a runtime vs. input size graph using Matplotlib and a built-in input generator (not developed by me); 2) an analysis report in Portuguese.
