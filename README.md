@@ -5,7 +5,11 @@ This repository contains solutions to three projects I developed as part of my A
 - The project description (in Portuguese).  
 - A Python script I developed (`generate_graph_auto`) to generate a runtime vs. input size graph using Matplotlib and a built-in input generator (not developed by me).  
 - A few instances of graphs produced by my generator.  
-- An analysis report (in Portuguese).  
+- An analysis report (in Portuguese).
+
+## Graph Generator
+
+The Python graph generator executes the project solution script using the subprocess module and measures its runtime. It then uses Matplotlib to plot a graph, with runtime on the y-axis and the complexity function applied to the input size on the x-axis.
 
 ## Projects  
 
